@@ -1,0 +1,19 @@
+image: Visual Studio 2022
+
+build_script:
+  - if not exist graalvm-ce-java17-windows-amd64-22.0.0.2.zip curl -O -sSL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java17-windows-amd64-22.0.0.2.zip
+  - 7z x graalvm-ce-java17-windows-amd64-22.0.0.2.zip
+  - set PATH=%PATH%;%CD%\graalvm-ce-java17-22.0.0.2\bin
+  - gu install native-image
+  # - curl -O -sSL https://github.com/loveemu/petitemm/releases/download/v1.0/petitemm-1.0.7z
+  - curl -O -sSL https://dl.smwcentral.net/22699/PetiteMM.zip
+  - 7z x PetiteMM.zip
+  - call "c:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - native-image -jar  PetiteMM\PetiteMM.jar
+  - sha1sum PetiteMM\PetiteMM.jar *.exe
+
+artifacts:
+  - path: '*.exe'
+
+cache:
+  - graalvm-ce-java17-windows-amd64-22.0.0.2.zip
